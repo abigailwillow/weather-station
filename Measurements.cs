@@ -4,7 +4,7 @@ using System.Net;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using WeatherStation.Models;
 
 public class Measurements {
@@ -32,7 +32,13 @@ public class Measurements {
             return response;
         }
 
-        Measurement[] measurements = JsonConvert.DeserializeObject<Measurement[]>(json);
+        JObject weatherData = JObject.Parse(json);
+        List<JToken> measurementsData = weatherData["actual"]["stationmeasurements"].Children().ToList();
+        List<Measurement> measurements = new List<Measurement>();
+        foreach (JToken measurementData in measurementsData) {
+            Measurement measurement = measurementData.ToObject<Measurement>();
+            measurements.Add(measurement);
+        }
 
         await response.WriteAsJsonAsync(measurements);
 
