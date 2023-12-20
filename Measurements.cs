@@ -1,26 +1,41 @@
+namespace WeatherStation;
+
 using System.Net;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using WeatherStation.Models;
 
-namespace WeatherStation {
-    public class Measurements {
-        private readonly ILogger _logger;
+public class Measurements {
+    private readonly ILogger log;
 
-        public Measurements(ILoggerFactory loggerFactory) {
-            _logger = loggerFactory.CreateLogger<Measurements>();
-        }
+    public Measurements(ILoggerFactory loggerFactory) {
+        log = loggerFactory.CreateLogger<Measurements>();
+    }
 
-        [Function("Function1")]
-        public HttpResponseData Run([HttpTrigger(AuthorizationLevel.Anonymous, "get", "post")] HttpRequestData req) {
-            _logger.LogInformation("C# HTTP trigger function processed a request.");
+    [Function("Measurements")]
+    public async Task<HttpResponseData> GetMeasurements([HttpTrigger(AuthorizationLevel.Anonymous, "GET", Route = "measurements")] HttpRequestData request) {
+        const string URL = "https://data.buienradar.nl/2.0/feed/json";
 
-            var response = req.CreateResponse(HttpStatusCode.OK);
-            response.Headers.Add("Content-Type", "text/plain; charset=utf-8");
+        HttpResponseData response = request.CreateResponse();
 
-            response.WriteString("Welcome to Azure Functions!");
-
+        string json = string.Empty;
+        try {
+            HttpClient client = new();
+            HttpResponseMessage httpResponse = await client.GetAsync(URL);
+            httpResponse.EnsureSuccessStatusCode();
+            json =  await httpResponse.Content.ReadAsStringAsync();
+        } catch (Exception exception) {
+            log.LogError(exception.Message);
+            response.StatusCode = HttpStatusCode.InternalServerError;
             return response;
         }
+
+        Measurement[] measurements = JsonConvert.DeserializeObject<Measurement[]>(json);
+
+        await response.WriteAsJsonAsync(measurements);
+
+        return response;
     }
 }
