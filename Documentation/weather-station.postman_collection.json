@@ -1,0 +1,54 @@
+{
+	"info": {
+		"_postman_id": "551a788a-b6aa-4633-9cfd-c585a9dd414a",
+		"name": "Weather Application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12915553"
+	},
+	"item": [
+		{
+			"name": "/measurements",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{base_url}}/measurements",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"measurements"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:7191/api",
+			"type": "string"
+		}
+	]
+}
