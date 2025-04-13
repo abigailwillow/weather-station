@@ -1,7 +1,8 @@
-using Azure.Storage.Queues;
+using WeatherStation.Extensions;
 
 namespace WeatherStation;
 
+using Azure.Storage.Queues;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
 using Microsoft.Extensions.Logging;
@@ -21,12 +22,12 @@ public class Measurements {
         _queue.CreateIfNotExists();
     }
 
-    [Function(nameof(GetMeasurements))]
-    public async Task<HttpResponseData> GetMeasurements([HttpTrigger(AuthorizationLevel.Anonymous, "GET", Route = "measurements")] HttpRequestData request) {
+    [Function(nameof(RequestImages))]
+    public HttpResponseData RequestImages([HttpTrigger(AuthorizationLevel.Anonymous, "POST", Route = "request-images")] HttpRequestData request) {
         string jobId = Guid.NewGuid().ToString();
         string jobUrl = $"{request.Url.GetLeftPart(UriPartial.Authority)}/api/jobs/{jobId}";
-
-        _queue.SendMessageAsync(JsonSerializer.Serialize(new {jobId = jobId}));
+        
+        _queue.SendMessageString(jobId);
         
         HttpResponseData response = request.CreateResponse();
         response.WriteString(JsonSerializer.Serialize(new {job = jobUrl}));
