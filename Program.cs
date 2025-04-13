@@ -1,14 +1,18 @@
-using Microsoft.Azure.Functions.Worker;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Azure.Functions.Worker.Builder;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Hosting;
 
-var host = new HostBuilder()
-    .ConfigureFunctionsWorkerDefaults()
-    .ConfigureServices(services =>
-    {
-        services.AddApplicationInsightsTelemetryWorkerService();
-        services.ConfigureFunctionsApplicationInsights();
-    })
-    .Build();
+FunctionsApplicationBuilder builder = FunctionsApplication.CreateBuilder(args);
 
-host.Run();
+builder.Services.AddAzureClients(clientBuilder => {
+    string? storageConnectionString = Environment.GetEnvironmentVariable("AzureWebJobsStorage");
+    
+    if (string.IsNullOrEmpty(storageConnectionString)) {
+        throw new InvalidOperationException("AzureWebJobsStorage connection string is not configured.");
+    }
+    
+    clientBuilder.AddBlobServiceClient(storageConnectionString);
+    clientBuilder.AddQueueServiceClient(storageConnectionString);
+});
+
+builder.Build().Run();
