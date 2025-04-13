@@ -23,9 +23,8 @@ public class Measurements {
 
     [Function(nameof(GetMeasurements))]
     public async Task<HttpResponseData> GetMeasurements([HttpTrigger(AuthorizationLevel.Anonymous, "GET", Route = "measurements")] HttpRequestData request) {
-        // TODO: Implement base url resolving logic
         string jobId = Guid.NewGuid().ToString();
-        string jobUrl = $"https://example.com/api/jobs/{jobId}";
+        string jobUrl = $"{request.Url.GetLeftPart(UriPartial.Authority)}/api/jobs/{jobId}";
 
         _queue.SendMessageAsync(JsonSerializer.Serialize(new {jobId = jobId}));
         
@@ -36,6 +35,8 @@ public class Measurements {
 
     [Function(nameof(GenerateImage))]
     public async Task<string> GenerateImage([QueueTrigger("image-generation-queue")] string jobId, FunctionContext context) {
+        _log.LogInformation($"Started job {jobId}"); 
+        
         HttpClient client = new();
         HttpResponseMessage httpResponse = await client.GetAsync(WEATHER_API_URL);
         httpResponse.EnsureSuccessStatusCode();
