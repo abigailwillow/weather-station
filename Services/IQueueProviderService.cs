@@ -2,7 +2,6 @@
 
 using Azure.Storage.Queues;
 
-public interface IQueueProviderService
-{
+public interface IQueueProviderService {
     public QueueClient GetQueueClient();
 }

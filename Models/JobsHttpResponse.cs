@@ -2,8 +2,7 @@
 
 using System.Text.Json.Serialization;
 
-public class JobsHttpResponse
-{
+public class JobsHttpResponse {
     [JsonPropertyName("status")]
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public JobStatus Status { get; set; }

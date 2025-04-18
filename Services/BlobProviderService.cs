@@ -3,8 +3,7 @@
 using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 
-public class BlobProviderService : IBlobProviderService
-{
+public class BlobProviderService : IBlobProviderService {
     private readonly BlobContainerClient _blob;
 
     public BlobProviderService(BlobServiceClient blobServiceClient) {

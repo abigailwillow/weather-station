@@ -2,8 +2,7 @@
 
 using Azure.Storage.Queues;
 
-public class QueueProviderService : IQueueProviderService
-{
+public class QueueProviderService : IQueueProviderService {
     private readonly QueueClient _queue;
 
     public QueueProviderService(QueueServiceClient queueServiceClient) {

@@ -2,8 +2,7 @@
 
 using System.Text.Json.Serialization;
 
-public struct JobMetadata
-{
+public struct JobMetadata {
     [JsonPropertyName("stationCount")]
     public int StationCount { get; init; }
 }

@@ -1,7 +1,6 @@
 ﻿namespace WeatherStation.Models;
 
-public enum JobStatus
-{
+public enum JobStatus {
     INVALID,
     PENDING,
     COMPLETED

@@ -15,8 +15,7 @@ using WeatherStation.Models;
 using WeatherStation.Extensions;
 using WeatherStation.Services;
 
-public class RequestImages(ILoggerFactory loggerFactory, IQueueProviderService queueProviderService, IBlobProviderService blobProviderService)
-{
+public class RequestImages(ILoggerFactory loggerFactory, IQueueProviderService queueProviderService, IBlobProviderService blobProviderService) {
     private const string WEATHER_API_URL = "https://data.buienradar.nl/2.0/feed/json";
     
     private readonly ILogger _logger = loggerFactory.CreateLogger<RequestImages>();
@@ -24,8 +23,7 @@ public class RequestImages(ILoggerFactory loggerFactory, IQueueProviderService q
     private readonly BlobContainerClient _blob = blobProviderService.GetBlobContainerClient();
 
     [Function(nameof(RequestImages))]
-    public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "POST", Route = "request-images")] HttpRequestData request)
-    {
+    public async Task<HttpResponseData> Run([HttpTrigger(AuthorizationLevel.Anonymous, "POST", Route = "request-images")] HttpRequestData request) {
         string jobId = Guid.NewGuid().ToString();
         string jobUrl = $"{request.Url.GetLeftPart(UriPartial.Authority)}/api/jobs/{jobId}";
 
