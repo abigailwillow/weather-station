@@ -2,4 +2,4 @@
 
 ## API Documentation
 
-See [Postman Collection](./Documentation/weather-station.postman_collection.json)
+See [HAR Collection](./Documentation/weather-station-endpoints.har)
