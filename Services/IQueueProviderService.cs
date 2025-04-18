@@ -3,5 +3,6 @@
 using Azure.Storage.Queues;
 
 public interface IQueueProviderService {
-    public QueueClient GetQueueClient();
+    public QueueClient GetJobSetupQueueClient();
+    public QueueClient GetImageGenerationQueueClient();
 }

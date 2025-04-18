@@ -3,5 +3,5 @@
 using Azure.Storage.Blobs;
 
 public interface IBlobProviderService {
-    public BlobContainerClient GetBlobContainerClient();
+    public BlobContainerClient GetImageBlobContainerClient();
 }

@@ -3,12 +3,17 @@
 using Azure.Storage.Queues;
 
 public class QueueProviderService : IQueueProviderService {
-    private readonly QueueClient _queue;
+    private readonly QueueClient _jobSetupQueue;
+    private readonly QueueClient _imageGenerationQueue;
 
     public QueueProviderService(QueueServiceClient queueServiceClient) {
-        _queue = queueServiceClient.GetQueueClient("image-generation-queue");
-        _queue.CreateIfNotExists();
+        _jobSetupQueue = queueServiceClient.GetQueueClient("job-setup-queue");
+        _jobSetupQueue.CreateIfNotExists();
+
+        _imageGenerationQueue = queueServiceClient.GetQueueClient("image-generation-queue");
+        _imageGenerationQueue.CreateIfNotExists();
     }
 
-    public QueueClient GetQueueClient() => _queue;
+    public QueueClient GetJobSetupQueueClient() => _jobSetupQueue;
+    public QueueClient GetImageGenerationQueueClient() => _imageGenerationQueue;
 }

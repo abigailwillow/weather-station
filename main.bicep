@@ -29,6 +29,11 @@ resource queueService 'Microsoft.Storage/storageAccounts/queueServices@2023-05-0
     name: 'default'
 }
 
+resource jobSetupQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2023-05-01' = {
+    parent: queueService
+    name: 'job-setup-queue'
+}
+
 resource imageGenerationQueue 'Microsoft.Storage/storageAccounts/queueServices/queues@2023-05-01' = {
     parent: queueService
     name: 'image-generation-queue'
@@ -45,6 +50,16 @@ resource imageBlobContainer 'Microsoft.Storage/storageAccounts/blobServices/cont
     properties: {
         publicAccess: 'Blob'
     }
+}
+
+resource tableService 'Microsoft.Storage/storageAccounts/tableServices@2023-05-01' = {
+    parent: storageAccount
+    name: 'default'
+}
+
+resource jobsTable 'Microsoft.Storage/storageAccounts/tableServices/tables@2023-05-01' = {
+    parent: tableService
+    name: 'jobs'
 }
 
 var storageAccountConnectionString = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${storageAccount.listKeys().keys[0].value};EndpointSuffix=core.windows.net'

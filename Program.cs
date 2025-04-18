@@ -15,9 +15,11 @@ builder.Services.AddAzureClients(clientBuilder => {
     
     clientBuilder.AddBlobServiceClient(storageConnectionString);
     clientBuilder.AddQueueServiceClient(storageConnectionString);
+    clientBuilder.AddTableServiceClient(storageConnectionString);
 });
 
 builder.Services.AddSingleton<IBlobProviderService, BlobProviderService>();
 builder.Services.AddSingleton<IQueueProviderService, QueueProviderService>();
+builder.Services.AddSingleton<ITableProviderService, TableProviderService>();
 
 builder.Build().Run();

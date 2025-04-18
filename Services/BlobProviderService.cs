@@ -4,13 +4,13 @@ using Azure.Storage.Blobs;
 using Azure.Storage.Blobs.Models;
 
 public class BlobProviderService : IBlobProviderService {
-    private readonly BlobContainerClient _blob;
+    private readonly BlobContainerClient _imageBlob;
 
     public BlobProviderService(BlobServiceClient blobServiceClient) {
-        _blob = blobServiceClient.GetBlobContainerClient("images");
-        _blob.SetAccessPolicy(PublicAccessType.Blob);
-        _blob.CreateIfNotExists();
+        _imageBlob = blobServiceClient.GetBlobContainerClient("images");
+        _imageBlob.SetAccessPolicy(PublicAccessType.Blob);
+        _imageBlob.CreateIfNotExists();
     }
 
-    public BlobContainerClient GetBlobContainerClient() => _blob;
+    public BlobContainerClient GetImageBlobContainerClient() => _imageBlob;
 }
